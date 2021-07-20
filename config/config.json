@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "share-item-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/shareItem/ShareItemCommandSet.js",
+          "manifest": "./src/extensions/shareItem/ShareItemCommandSet.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ShareItemCommandSetStrings": "lib/extensions/shareItem/loc/{locale}.js"
+  }
+}

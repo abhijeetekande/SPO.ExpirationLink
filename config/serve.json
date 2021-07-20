@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://abhiekande.sharepoint.com/sites/dev3/Lists/TestList/AllItems.aspx",
+      "customActions": {
+        "71ace748-c1a4-4b80-a44e-8b2ac1dfe3fb": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {
+            "sampleTextOne": "One item is selected in the list",
+            "sampleTextTwo": "This command is always visible."
+          }
+        }
+      }
+    },
+    "shareItem": {
+      "pageUrl": "https://abhiekande.sharepoint.com/sites/dev3/Lists/TestList/AllItems.aspx",
+      "customActions": {
+        "71ace748-c1a4-4b80-a44e-8b2ac1dfe3fb": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {
+            "sampleTextOne": "One item is selected in the list",
+            "sampleTextTwo": "This command is always visible."
+          }
+        }
+      }
+    }
+  }
+}
