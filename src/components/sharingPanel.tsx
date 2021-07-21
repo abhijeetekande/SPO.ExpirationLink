@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PanelType } from 'office-ui-fabric-react/lib/Panel';
-import { TextField, DefaultButton, PrimaryButton, DialogFooter, Panel, Spinner } from "office-ui-fabric-react";
+import { TextField, DefaultButton, PrimaryButton, DialogFooter, Panel, Spinner, Dropdown, Label } from "office-ui-fabric-react";
 import { PrincipalType, IOfficeUiFabricPeoplePickerProps, OfficeUiFabricPeoplePicker, TypePicker } from './OfficeUiFabricPeoplePicker';
 import { DatePicker, DayOfWeek, IDatePickerStrings } from 'office-ui-fabric-react/lib/DatePicker';
 import { sp } from "@pnp/sp";
@@ -10,8 +10,8 @@ import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 const today: Date = new Date(Date.now());
 //Only allow forecoming month to be selected
 const minDate = today;
-minDate.setMonth(today.getMonth()+1);
-minDate.setDate(1);
+//minDate.setMonth(today.getMonth());
+//minDate.setDate(1);
 var samples;
 const DayPickerStrings: IDatePickerStrings = {
   months: [
@@ -57,6 +57,7 @@ export interface ISharingPanelProps {
     listId: string;
     context:ListViewCommandSetContext;
     siteurl: string;
+    itemUrl: string;
 }
 
 export default class SharingPanel extends React.Component<ISharingPanelProps, ISharingPanelState > {
@@ -69,6 +70,9 @@ export default class SharingPanel extends React.Component<ISharingPanelProps, IS
             Plannedclosingdateforaction: null,
             Personsforcorrectiveactions: "",
         };
+
+        this._onSelectDate= this._onSelectDate.bind(this); 
+        this._getPeoplePickerItems = this._getPeoplePickerItems.bind(this);
     }
     private _onSelectDate = (date: Date | null | undefined): void => {
         this.setState({ Plannedclosingdateforaction: date });
@@ -106,25 +110,38 @@ export default class SharingPanel extends React.Component<ISharingPanelProps, IS
     }
 
   public render(): React.ReactElement<ISharingPanelProps> {
-    let { isOpen, currentTitle } = this.props;
+    let { isOpen, currentTitle, itemUrl, itemId, listId } = this.props;
     const { firstDayOfWeek, Plannedclosingdateforaction } = this.state;
     return (
       
         <Panel isOpen={isOpen}>
-                <h2>This is a custom panel with your own content</h2>
-                <TextField value={currentTitle} label="Item title" placeholder="Choose the new title" />
+                <h2>Share item/file with user</h2>
+                <TextField value={listId} label="List ID" placeholder="Choose the new title" />
+                <TextField value={currentTitle} label="Item Title" placeholder="Choose the new title" />
+                <TextField value ={itemId.toString()} label="Item ID"/>
+                <Dropdown options={[
+                  { key: 'Edit', text: 'Edit'},
+    {key: 'View', text: 'View'}
+  ]}
+  placeHolder="Select Permission"
+  label="Permission:"
+  id="ddlPermission"
+  ariaLabel="Permission"
+  />
+  <Label >Please select user</Label>
                 <OfficeUiFabricPeoplePicker
                         spHttpClient= {this.props.context.spHttpClient}
                         siteUrl={this.props.siteurl}
                         typePicker={TypePicker.Normal}
                         principalType={PrincipalType.User}
                         numberOfItems= {10}
-                        itemLimit={1}
+                        itemLimit={5}
                         onChange={this._getPeoplePickerItems}
                         >
                     </OfficeUiFabricPeoplePicker>
                     <div className="docs-DatePickerExample">                      
                       <DatePicker
+                      label='Select expiration Date'
                         isRequired={true}                        
                         firstDayOfWeek={DayOfWeek.Monday}
                         strings={DayPickerStrings}
@@ -137,7 +154,7 @@ export default class SharingPanel extends React.Component<ISharingPanelProps, IS
                       />
                     </div>   
                 <DialogFooter>
-                    <DefaultButton text="Cancel" onClick={this._onCancel} />
+                    <DefaultButton text="Cancel" onClick={this._onCancel.bind(this)} />
                     <PrimaryButton text="Save" onClick={this._onSave} />
                 </DialogFooter>
             </Panel>

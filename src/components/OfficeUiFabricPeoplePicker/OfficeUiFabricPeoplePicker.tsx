@@ -28,10 +28,11 @@ export interface HttpClientImpl {
 export class OfficeUiFabricPeoplePicker extends React.Component<IOfficeUiFabricPeoplePickerProps, IOfficeUiFabricPeoplePickerState> {
 
   constructor(props: IOfficeUiFabricPeoplePickerProps, context?: any) {
-    super(props, context);
+    super(props); //super(props, context);
     this.state = {
       selectedItems: props.selectedItems
     };
+    //this.searchPeople= this.searchPeople.bind(this); 
   }
 
   public render(): React.ReactElement<IOfficeUiFabricPeoplePickerProps> {
@@ -39,7 +40,7 @@ export class OfficeUiFabricPeoplePicker extends React.Component<IOfficeUiFabricP
       return (
         <NormalPeoplePicker
           onChange={this._onChange.bind(this)}
-          onResolveSuggestions={this._onFilterChanged}
+          onResolveSuggestions={this._onFilterChanged.bind(this)}
           getTextFromItem={(persona: IPersonaProps) => persona.text}
           pickerSuggestionsProps={suggestionProps}
           className={'ms-PeoplePicker'}
@@ -50,9 +51,9 @@ export class OfficeUiFabricPeoplePicker extends React.Component<IOfficeUiFabricP
       );
     } else {
       return (
-        <CompactPeoplePicker
+        <CompactPeoplePicker 
           onChange={this._onChange.bind(this)}
-          onResolveSuggestions={this._onFilterChanged}
+          onResolveSuggestions={this._onFilterChanged.bind(this)}
           getTextFromItem={(persona: IPersonaProps) => persona.text}
           pickerSuggestionsProps={suggestionProps}
           selectedItems={this.state.selectedItems}
@@ -76,15 +77,15 @@ export class OfficeUiFabricPeoplePicker extends React.Component<IOfficeUiFabricP
   
   private _onFilterChanged(filterText: string, currentPersonas: IPersonaProps[], limitResults?: number) {
     if (!filterText || filterText.length < 3) return Promise.resolve([] as IPersonaProps[]);
-     return this._searchPeople(filterText);
+     return this.searchPeople(filterText);
   }
 
   /**
    * @function
    * Returns people results after a REST API call
    */
-  private _searchPeople(terms: string) {
-        
+   //public searchPeople(terms: string) {
+    searchPeople = (terms:string) =>  {  
     const userRequestUrl = `${this.props.siteUrl}/_api/SP.UI.ApplicationPages.ClientPeoplePickerWebServiceInterface.clientPeoplePickerSearchUser`;
     const ensureUserUrl = `${this.props.siteUrl}/_api/web/ensureUser`;
     const userQueryParams = {

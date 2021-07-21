@@ -59,7 +59,8 @@ export default class ShareItemCommandSet extends BaseListViewCommandSet<IShareIt
             let selectedItem = event.selectedRows[0];
             const listItemId = selectedItem.getValueByName('ID') as number;
             const title = selectedItem.getValueByName("Title");
-            this._showPanel(listItemId, title);
+            const itemUrl = selectedItem.getValueByName("FileRef");
+            this._showPanel(listItemId, title,itemUrl);
    // break;
      //   Dialog.alert(`${this.properties.sampleTextOne}`);
         break;
@@ -71,15 +72,16 @@ export default class ShareItemCommandSet extends BaseListViewCommandSet<IShareIt
     }
   }
 
-  private _showPanel(itemId: number, currentTitle: string) {
+  private _showPanel(itemId: number, currentTitle: string, itemUrl:string) {
     this._renderPanelComponent({
       isOpen: true,
       currentTitle,
       itemId,
       listId: this.context.pageContext.list.id.toString(),
-      onClose: this._dismissPanel,
+      onClose: this._dismissPanel.bind(this),
       context:this.context,
-      siteurl: this.context.pageContext.site.absoluteUrl,
+      siteurl: this.context.pageContext.web.absoluteUrl,
+      itemUrl
     });
   }
 
@@ -93,7 +95,8 @@ export default class ShareItemCommandSet extends BaseListViewCommandSet<IShareIt
       currentTitle: null,
       itemId: null,
       isOpen: false,
-      listId: null
+      listId: null,
+      itemUrl:null,
     }, props));
     ReactDom.render(element, this.panelPlaceHolder);
   }
